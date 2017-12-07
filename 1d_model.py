@@ -33,7 +33,7 @@ erslab = 12.        # relative permittivity of slab
 
 ### Grid Parameters ###
 ermax = max([erair, erslab])        # relative permittivity
-nmax  = 1#np.sqrt(ermax)              # maximum refractive index
+nmax  = np.sqrt(ermax)              # maximum refractive index
 NLAM  = 10                          # grid resolution, resolve nmax with 10pts
 NDIM  = 1                           # number of dimensions
 NBUFZ = [100, 100]                  # space before and after device
@@ -41,10 +41,10 @@ lam0  = c0/fmax                     # min wavelength in simulation
 # grid resolution, min between first two
 dz1   = lam0/nmax/NLAM
 dz2   = dslab/NDIM
-dz    = dz1#min([dz1,dz2])
+dz    = min([dz1,dz2])
 # number of points in grid
 nz    = math.ceil(dslab/dz)
-Nz    = sum(NBUFZ)+3#int(nz) + sum(NBUFZ) + 3    # number of points in grid
+Nz    = int(nz) + sum(NBUFZ) + 3    # number of points in grid
 Z     = dz*np.arange(0,Nz)          # distance array for domain
 
 # Initialize material constants
@@ -79,13 +79,13 @@ Hx = np.zeros(Nz)   # Magnetic Field
 ############################################################
 ### Matrices ###
 
-# Define transformation matrices
-A = sp.lil_matrix((Nz,Nz))
-A.setdiag(-1.*np.ones(Nz),k=0)
-A.setdiag(np.ones(Nz-1),k=1)
-A = A.tocsr()
+# Define transformation matrices for forward difference
+A = sp.lil_matrix((Nz,Nz))          # Sparse Matrix for Hx update
+A.setdiag(-1.*np.ones(Nz),k=0)      # Matrix diagonal to -1
+A.setdiag(np.ones(Nz-1),k=1)        # Matrix off-diagonal to 1
+A = A.tocsr()                       # Convert to compressed sparse row format to save space
 
-B = sp.lil_matrix((Nz,Nz))
+B = sp.lil_matrix((Nz,Nz))          # Sparse Matrix for Ey update
 B.setdiag(np.ones(Nz),k=0)
 B.setdiag(-1.*np.ones(Nz-1),k=-1)
 B = B.tocsr()
@@ -95,6 +95,7 @@ A[-1,:] = 0
 B[0,:] = 0
 
 # Perfectly absorbing BC
+PABC = False
 H1,H2,H3 = 0,0,0
 E1,E2,E3 = 0,0,0
 
@@ -119,17 +120,19 @@ for t_i in np.arange(steps):
     # Update Magnetic Field
     Hx += (mHx/dz)*(A*Ey)
     Hx[-1] = Hx[-1] + mHx[-1]*(E3 - Ey[-1])/dz
-    # Record H-field at Boundary
-    H3 = H2
-    H2 = H1
-    H1 = Hx[0]
+    if PABC == True:
+        # Record H-field at Boundary
+        H3 = H2
+        H2 = H1
+        H1 = Hx[0]
     # Update Electric Field
     Ey += (mEy/dz)*(B*Hx)
     Ey[0] = Ey[0] + mEy[0]*(Hx[0] - H3)/dz
-    # Record E-field at Boundary
-    E3 = E2
-    E2 = E1
-    E1 = Ey[-1]
+    if PABC == True:
+        # Record E-field at Boundary
+        E3 = E2
+        E2 = E1
+        E1 = Ey[-1]
     # Apply the source
     Ey[nz_src] = Ey[nz_src] + Esrc[t_i]
 
