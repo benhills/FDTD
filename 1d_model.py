@@ -108,7 +108,6 @@ for t_i in np.arange(steps):
 
     # Update Magnetic Field
     Hx += (mHx/dz)*(A*Ey)
-    Hx[-1] = Hx[-1] + mHx[-1]*(E3 - Ey[-1])/dz
     if PABC == True:
         # Record H-field at Boundary
         H3 = H2
@@ -116,7 +115,6 @@ for t_i in np.arange(steps):
         H1 = Hx[0]
     # Update Electric Field
     Ey += (mEy/dz)*(B*Hx)
-    Ey[0] = Ey[0] + mEy[0]*(Hx[0] - H3)/dz
     if PABC == True:
         # Record E-field at Boundary
         E3 = E2
