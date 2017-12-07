@@ -2,9 +2,10 @@
 
 """
 Finite difference time domain model
-1-dimensional
+2-dimensional
 
 For solving the Maxwell Equations
+See 1d_model.py for the 1-d analogous model
 
 Author: Ben Hills
 """
@@ -14,188 +15,121 @@ import numpy as np
 import scipy.sparse as sp
 import math
 
-c0 = 3e8        #m/s
-e0 = 8.85e-12   # 1/m
-u0 = 1.26e-6    # 1/m
+############################################################
+### Setup ###
 
-# slab properties
-dslab = 0.25/3.1
-erair = 1.
-erslab = 12.
+# Constants
+c0 = 3e8        # Speed of Light m/s
+e0 = 8.85e-12   # free space permittivity 1/m
+u0 = 1.26e-6    # free space permeability 1/m
+fmax   = 5e9    # Source Frequency 1/s
 
-# Source Parameters
-fmax  = 5e9  # 1/s
+# bed properties
+erice = 1.          # relative permittivity of ice
+erbed = 12.         # relative permittivity of bed
+bed_thick = 0.1
 
-# Grid Parameters
-ermax = max([erair, erslab])
-nmax  = np.sqrt(ermax)
-NLAM  = 10
-NDIM  = 1
-NBUFZ = [100, 100]
-lam0  = c0/fmax
-dz1   = lam0/nmax/NLAM
-dz2   = dslab/NDIM
-dz    = min([dz1,dz2])
-nz    = math.ceil(dslab/dz)
-dz    = dslab/nz
-Nz    = int(nz) + sum(NBUFZ) + 3
-Z     = dz*np.arange(0,Nz)
+### Grid Parameters ###
+ermax = max([erice, erbed])                     # maximum relative permittivity
+nmax  = np.sqrt(ermax)                          # maximum refractive index
+NLAM  = 10                                      # grid resolution, resolve nmax with 10pts
+lam0  = c0/fmax                                 # min wavelength in simulation
+dx,dz = lam0/nmax/NLAM, lam0/nmax/NLAM          # step size in x/z-direction
+Nx,Nz = 200,200                                 # number of x/z points in grid
+X,Z   = dx*np.arange(0,Nx), dz*np.arange(0,Nz)  # X-distance and Z-depth arrays for domain
+nslab_1 = int(Nz/2)                             # bed start location
+nslab_2 = nslab_1 + math.ceil(bed_thick/dz)  -1      # slab end location
 
 # Initialize material constants
-Er = erair*np.ones(Nz)
-Ur = np.ones(Nz)
-
-nz1 = 2 + NBUFZ[0] +1
-nz2 = nz1 + math.ceil(dslab/dz) -1
-
-Er[nz1:nz2] = erslab
+Er = erice*np.ones(Nz)              # relative permittivity
+Ur = np.ones(Nz)                    # relative permeability
+#Er[nslab_1:nslab_2] = erbed        # relative permittivity in the slab
 
 # Time Domain
-nbc   = np.sqrt(Ur[0]*Er[0])
-dt    = nbc*dz/(2*c0)
-tau   = 0.5/fmax
-t0    = 5.*tau
-tprop = nmax*Nz*dz/c0
-t     = 2.*t0 + 3.*tprop
-steps = math.ceil(t/dt)
+nbc   = np.sqrt(Ur[0]*Er[0])        # refractive index at boundary
+dt    = nbc*dz/(2*c0)               # time step
+tau   = 0.5/fmax                    # duration of Gaussian source
+t0    = 5.*tau                      # initial time, offset of Gaussian source
+tprop = nmax*Nz*dz/c0               # time for wave accross grid
+t_f     = 2.*t0 + 3.*tprop          # total simulation time
+steps = math.ceil(t_f/dt)           # number of time steps
+t     = np.arange(0,steps)*dt       # update simulation time
+
 # Source
-t      = np.arange(0,steps)*dt
-s      = dz/(2.*c0)+dt/2.
-nz_src = math.ceil(Nz/6.)
-Esrc   = np.exp(-((t-t0)/tau)**2.)
-A      = -np.sqrt(Er[nz_src]/Ur[nz_src])
-Hsrc   = A*np.exp(-((t-t0 +s)/tau)**2.)
+nx_src = math.ceil(Nz/2.)                   # Index of Source Location
+nz_src = math.ceil(Nz/2.)                   # Index of Source Location
+Esrc   = np.exp(-((t-t0)/tau)**2.)          # Electricity source, Gaussian
 
 # Initialize FDTD parametrs
-mEy = (c0*dt)/Er
-mHx = (c0*dt)/Ur
+mEy = (c0*dt)/Er    # Electricity multiplication parameter
+mHx = (c0*dt)/Ur    # Magnetism multiplication parameter
+# Initialize fields to zero
+Ey = np.zeros(Nz)   # Electric Field
+Hx = np.zeros(Nz)   # Magnetic Field
 
-Ey = np.zeros(Nz)
-Hx = np.zeros(Nz)
+############################################################
+### Matrices ###
 
-# Define transformation matrices
-A = sp.lil_matrix((Nz,Nz))
-A.setdiag(-1.*np.ones(Nz),k=0)
-A.setdiag(np.ones(Nz-1),k=1)
+# Define transformation matrices for forward difference
+A = sp.lil_matrix((Nz,Nz))          # Sparse Matrix for Hx update
+A.setdiag(-1.*np.ones(Nz),k=0)      # Matrix diagonal to -1
+A.setdiag(np.ones(Nz-1),k=1)        # Matrix off-diagonal to 1
 
-B = sp.lil_matrix((Nz,Nz))
+B = sp.lil_matrix((Nz,Nz))          # Sparse Matrix for Ey update
 B.setdiag(np.ones(Nz),k=0)
 B.setdiag(-1.*np.ones(Nz-1),k=-1)
-
-A = A.tocsr()
-B = B.tocsr()
 
 # Dirichlet BCs
 A[-1,:] = 0
 B[0,:] = 0
 
 # Perfectly absorbing BC
+PABC = False
 H1,H2,H3 = 0,0,0
 E1,E2,E3 = 0,0,0
 
-# Figure Setup
+############################################################
+### Figure ###
+
 fig = plt.figure()
 ax = plt.subplot()
-ax.set_ylim(-1,1)
+ax.set_ylim(-1.5,1.5)
 ax.set_xlim(min(Z),max(Z))
 
-plt.fill_betweenx(np.linspace(-5,5,10),Z[nz1],Z[nz2])
-
+#plt.fill_betweenx(np.linspace(-5,5,10),Z[nz1],Z[nz2])
 plt.ion()
+H_line, = plt.plot([],[],'r',zorder=1)
+E_line, = plt.plot([],[],'b',zorder=0)
 
-H_line, = plt.plot([],[],'b')
-E_line, = plt.plot([],[],'r')
+############################################################
+### Algorithm ###
 
 for t_i in np.arange(steps):
+
+    # Update Magnetic Field
     Hx += (mHx/dz)*(A*Ey)
     Hx[-1] = Hx[-1] + mHx[-1]*(E3 - Ey[-1])/dz
-    # Source
-    Hx[nz_src-1] -= mHx[nz_src-1]*Esrc[t_i]/dz
-    # Record H-field at Boundary
-    H3 = H2
-    H2 = H1
-    H1 = Hx[0]
-
+    if PABC == True:
+        # Record H-field at Boundary
+        H3 = H2
+        H2 = H1
+        H1 = Hx[0]
+    # Update Electric Field
     Ey += (mEy/dz)*(B*Hx)
     Ey[0] = Ey[0] + mEy[0]*(Hx[0] - H3)/dz
-    # Source
-    Ey[nz_src] -= mEy[nz_src]*Hsrc[t_i]/dz
-    # Record E-field at Boundary
-    E3 = E2
-    E2 = E1
-    E1 = Ey[-1]
+    if PABC == True:
+        # Record E-field at Boundary
+        E3 = E2
+        E2 = E1
+        E1 = Ey[-1]
+    # Apply the source
+    Ey[nz_src] = Ey[nz_src] + Esrc[t_i]
 
     # Plot
-    H_line.set_xdata(Z)
-    H_line.set_ydata(Hx)
     E_line.set_xdata(Z)
     E_line.set_ydata(Ey)
+    H_line.set_xdata(Z)
+    H_line.set_ydata(Hx)
     plt.pause(0.000001)
 
 
-"""
-c0 = 3e8    # m/s
-eps = 3.2#*np.ones_like(Z)
-mu = 3.2#*np.ones_like(Z)
-sigma = 7e-5#*np.ones_like(Z)
-
-zi = 0
-N = 100
-dz = 1000.
-Z = np.linspace(zi,N*dz+zi,N)
-
-dt = 6/7.*np.sqrt(mu*eps/(1/dz**2.))   # s
-tf = 1e-4   # s
-ts = np.arange(0,tf,dt)
-
-mE = c0*dt/eps
-mH = c0*dt/mu
-
-Ey = np.zeros_like(Z)
-Hx = np.zeros_like(Z)
-
-A = scipy.sparse.lil_matrix((N,N))
-A.setdiag(-1.*np.ones(N),k=0)
-A.setdiag(np.ones(N-1),k=1)
-
-B = scipy.sparse.lil_matrix((N,N))
-B.setdiag(np.ones(N),k=0)
-B.setdiag(-1.*np.ones(N-1),k=-1)
-
-A = A.tocsr()
-B = B.tocsr()
-
-# Dirichlet BCs
-A[0,:],A[-1,:] = 0,0
-B[0,:],B[-1,:] = 0,0
-
-Source = np.exp(-((ts-tf/8.)/(dt*2.))**2.)
-
-fig = plt.figure()
-ax = plt.subplot()
-ax.set_ylim(-1,1)
-ax.set_xlim(min(Z),max(Z))
-
-plt.ion()
-
-H_line, = plt.plot([],[],'b')
-E_line, = plt.plot([],[],'r')
-
-t = 0.
-count = 0
-while t < tf:
-    Ey[50] += Source[int(t/dt)]
-
-    Hx += (mE/dz)*A*Ey
-    t += (1/2.)*(dt)
-
-    Ey += (mH/dz)*B*Hx
-    t += (1/2.)*(dt)
-
-    H_line.set_xdata(Z)
-    H_line.set_ydata(Hx)
-    E_line.set_xdata(Z)
-    E_line.set_ydata(Ey)
-    plt.pause(0.01)
-    plt.draw()
-"""
