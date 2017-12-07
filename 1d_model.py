@@ -33,7 +33,7 @@ erslab = 12.        # relative permittivity of slab
 
 ### Grid Parameters ###
 ermax = max([erair, erslab])        # relative permittivity
-nmax  = np.sqrt(ermax)              # maximum refractive index
+nmax  = 1#np.sqrt(ermax)              # maximum refractive index
 NLAM  = 10                          # grid resolution, resolve nmax with 10pts
 NDIM  = 1                           # number of dimensions
 NBUFZ = [100, 100]                  # space before and after device
@@ -41,10 +41,10 @@ lam0  = c0/fmax                     # min wavelength in simulation
 # grid resolution, min between first two
 dz1   = lam0/nmax/NLAM
 dz2   = dslab/NDIM
-dz    = min([dz1,dz2])
+dz    = dz1#min([dz1,dz2])
 # number of points in grid
 nz    = math.ceil(dslab/dz)
-Nz    = int(nz) + sum(NBUFZ) + 3    # number of points in grid
+Nz    = sum(NBUFZ)+3#int(nz) + sum(NBUFZ) + 3    # number of points in grid
 Z     = dz*np.arange(0,Nz)          # distance array for domain
 
 # Initialize material constants
@@ -66,11 +66,8 @@ steps = math.ceil(t/dt)             # number of time steps
 t     = np.arange(0,steps)*dt       # update simulation time
 
 # Source
-nz_src = math.ceil(Nz/6.)                   # Index of Source Location
+nz_src = math.ceil(Nz/2.)                   # Index of Source Location
 Esrc   = np.exp(-((t-t0)/tau)**2.)          # Electricity source, Gaussian
-s      = dz/(2.*c0)+dt/2.
-Asrc   = -np.sqrt(Er[nz_src]/Ur[nz_src])
-Hsrc   = Asrc*np.exp(-((t-t0 +s)/tau)**2.)  # Magnetism source
 
 # Initialize FDTD parametrs
 mEy = (c0*dt)/Er    # Electricity multiplication parameter
@@ -111,48 +108,36 @@ ax.set_xlim(min(Z),max(Z))
 
 #plt.fill_betweenx(np.linspace(-5,5,10),Z[nz1],Z[nz2])
 plt.ion()
-H_line, = plt.plot([],[],'b')
-E_line, = plt.plot([],[],'r')
+H_line, = plt.plot([],[],'r',zorder=1)
+E_line, = plt.plot([],[],'b',zorder=0)
 
 ############################################################
 ### Algorithm ###
 
 for t_i in np.arange(steps):
-    """
+
     # Update Magnetic Field
     Hx += (mHx/dz)*(A*Ey)
     Hx[-1] = Hx[-1] + mHx[-1]*(E3 - Ey[-1])/dz
-    # Source
-    Hx[nz_src-1] -= mHx[nz_src-1]*Esrc[t_i]/dz
     # Record H-field at Boundary
-    #H3 = H2
-    #H2 = H1
-    #H1 = Hx[0]
-
+    H3 = H2
+    H2 = H1
+    H1 = Hx[0]
     # Update Electric Field
     Ey += (mEy/dz)*(B*Hx)
     Ey[0] = Ey[0] + mEy[0]*(Hx[0] - H3)/dz
-    # Source
-    Ey[nz_src] -= mEy[nz_src]*Hsrc[t_i]/dz
     # Record E-field at Boundary
-    #E3 = E2
-    #E2 = E1
-    #E1 = Ey[-1]
-    """
-    for i in range(Nz-1):
-        Hx[i] = Hx[i] + mHx[i]*(Ey[i+1]-Ey[i])/dz
-    Hx[-1] = Hx[-1] + mHx[-1]*(0-Ey[-1])/dz
-    Ey[0] = Ey[0] + mEy[0]*(Hx[0]-0)/dz
-    for i in range(Nz-1):
-        Ey[i] = Ey[i] + mEy[i]*(Hx[i]-Hx[i-1])/dz
-    # Inject E source
+    E3 = E2
+    E2 = E1
+    E1 = Ey[-1]
+    # Apply the source
     Ey[nz_src] = Ey[nz_src] + Esrc[t_i]
 
     # Plot
-    H_line.set_xdata(Z)
-    H_line.set_ydata(Hx)
     E_line.set_xdata(Z)
     E_line.set_ydata(Ey)
+    H_line.set_xdata(Z)
+    H_line.set_ydata(Hx)
     plt.pause(0.000001)
 
 
