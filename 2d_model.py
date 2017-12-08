@@ -34,60 +34,73 @@ ermax = max([erice, erbed])                     # maximum relative permittivity
 nmax  = np.sqrt(ermax)                          # maximum refractive index
 NLAM  = 10                                      # grid resolution, resolve nmax with 10pts
 lam0  = c0/fmax                                 # min wavelength in simulation
-dx,dz = lam0/nmax/NLAM, lam0/nmax/NLAM          # step size in x/z-direction
-Nx,Nz = 100,100                                 # number of x/z points in grid
-X,Z   = dx*np.arange(0,Nx), dz*np.arange(0,Nz)  # X-distance and Z-depth arrays for domain
-nslab_1 = int(Nz/2)                             # bed start location
-nslab_2 = nslab_1 + math.ceil(bed_thick/dz)  -1      # slab end location
+dx,dy = lam0/nmax/NLAM, lam0/nmax/NLAM          # step size in x/z-direction
+Nx,Ny = 100,100                                 # number of x/z points in grid
+X,Y   = dx*np.arange(0,Nx), dy*np.arange(0,Ny)  # X-distance and Z-depth arrays for domain
+nslab_1 = int(Ny/2)                             # bed start location
+nslab_2 = nslab_1 + math.ceil(bed_thick/dy)  -1      # slab end location
 
 # Initialize material constants
-N = Nx*Nz
-Er = erice*np.ones(N)              # relative permittivity
-Ur = np.ones(N)                    # relative permeability
+N = Nx*Ny
+epsz = erice*np.ones(N)              # relative permittivity
+mux = np.ones(N)                    # relative permeability
+muy = np.ones(N)                    # relative permeability
 #Er[nslab_1:nslab_2] = erbed        # relative permittivity in the slab
 
 # Time Domain
-nbc   = np.sqrt(Ur[0]*Er[0])        # refractive index at boundary
-dt    = nbc*dz/(2*c0)               # time step
-tau   = 0.5/fmax                    # duration of Gaussian source
-t0    = 5.*tau                      # initial time, offset of Gaussian source
-tprop = nmax*Nz*dz/c0               # time for wave accross grid
+nbc   = np.sqrt(mux[0]*epsz[0])        # refractive index at boundary
+dt    = nbc*dy/(2*c0)               # time step
+tau   = 0.1/fmax                    # duration of Gaussian source
+t0    = 2.*tau                      # initial time, offset of Gaussian source
+tprop = nmax*Ny*dy/c0               # time for wave accross grid
 t_f     = 2.*t0 + 3.*tprop          # total simulation time
 steps = math.ceil(t_f/dt)           # number of time steps
 t     = np.arange(0,steps)*dt       # update simulation time
 
 # Source
-nx_src = math.ceil(Nx/2.)                   # x Index of Source Location
-nz_src = math.ceil(Nz/2.)                   # z Index of Source Location
-n_src = int(nz_src*Nx+nx_src)
+nx_src = math.ceil(Nx/4.)                   # x Index of Source Location
+ny_src = math.ceil(Ny/4.)                   # y Index of Source Location
+n_src = int(ny_src*Nx+nx_src)
 Esrc   = np.exp(-((t-t0)/tau)**2.)          # Electricity source, Gaussian
 
 # Initialize FDTD parametrs
-mEy = (c0*dt)/Er    # Electricity multiplication parameter
-mHx = (c0*dt)/Ur    # Magnetism multiplication parameter
+mEz = (c0*dt)/epsz    # Electricity multiplication parameter
+mHx = (c0*dt)/mux    # Magnetism multiplication parameter
+mHy = (c0*dt)/muy    # Magnetism multiplication parameter
 # Initialize fields to zero
-Ey = np.zeros((N))   # Electric Field
-Hx = np.zeros((N))  # Magnetic Field
+Ez = np.zeros((N))   # Electric Field
+Hx = np.zeros((N))  # Magnetic Field in x direction
+Hy = np.zeros((N))  # Magnetic Field in y direction
 
 ############################################################
 ### Matrices ###
 
 # Define transformation matrices for forward difference
-A = sp.lil_matrix((N,N))               # Sparse Matrix for Hx update
-A.setdiag(-1.*np.ones(N),k=0)          # Matrix diagonal to -1 for the node itself
-A.setdiag(np.ones(N-1),k=1)            # Matrix off-diagonal to 1 for the node in the x-direction
-A.setdiag(np.ones(N-Nx),k=Nx)          # Matrix off-diagonal to 1 for the node in the z-direction
+Ea = sp.lil_matrix((N,N))               # Sparse Matrix for Hx update
+Ea.setdiag(-1.*np.ones(N),k=0)          # Matrix diagonal to -1 for the node itself
+Ea.setdiag(np.ones(N-Nx),k=Nx)          # Matrix off-diagonal to 1 for the node in the y-direction
+Ea/=dy
 
-B = sp.lil_matrix((N,N))               # Sparse Matrix for Ey update
-B.setdiag(np.ones(N),k=0)
-B.setdiag(-1.*np.ones(N-1),k=-1)
-B.setdiag(-1.*np.ones(N-Nx),k=-Nx)
+Eb = sp.lil_matrix((N,N))               # Sparse Matrix for Hx update
+Eb.setdiag(-1.*np.ones(N),k=0)          # Matrix diagonal to -1 for the node itself
+Eb.setdiag(np.ones(N-1),k=1)          # Matrix off-diagonal to 1 for the node in the y-direction
+Eb/=dx
+
+Ha = sp.lil_matrix((N,N))               # Sparse Matrix for Ey update
+Ha.setdiag(np.ones(N),k=0)
+Ha.setdiag(-1.*np.ones(N-Nx),k=-Nx)       # Matrix off-diagonal to 1 for the node in the x-direction
+Ha/=dy
+
+Hb = sp.lil_matrix((N,N))               # Sparse Matrix for Ey update
+Hb.setdiag(np.ones(N),k=0)
+Hb.setdiag(-1.*np.ones(N-1),k=-1)       # Matrix off-diagonal to 1 for the node in the x-direction
+Hb/=dx
 
 # Dirichlet BCs
-A[N-Nx:,:] = 0
-A[np.arange(Nz)*Nx-1,:] = 0
-B[:Nx+1,:] = 0
-B[np.arange(Nz)*Nx,:] = 0
+Ea[N-Nx:,:] = 0
+Eb[np.arange(Ny)*Nx-1,:] = 0
+Ha[:Nx+1,:] = 0
+Hb[np.arange(Ny)*Nx,:] = 0
 
 # Perfectly absorbing BC
 PABC = False
@@ -101,33 +114,36 @@ fig = plt.figure()
 ax = plt.subplot()
 
 plt.ion()
-im = plt.imshow(Ey.reshape(Nx,Nz),vmin=-2,vmax=2)
+im = plt.imshow(Ez.reshape(Nx,Ny),vmin=-.02,vmax=.02)
 
 ############################################################
+
 ### Algorithm ###
 
 for t_i in np.arange(steps):
 
     # Update Magnetic Field
-    Hx += (mHx/dz)*(A*Ey)
+    Hx += -mHx*(Ea*Ez)
+    Hy += mHy*(Eb*Ez)
     if PABC == True:
         # Record H-field at Boundary
         H3 = H2
         H2 = H1
         H1 = Hx[0]
+
     # Update Electric Field
-    Ey += (mEy/dz)*(B*Hx)
+    Ez += mEz*(Hb*Hy-Ha*Hx)
     if PABC == True:
         # Record E-field at Boundary
         E3 = E2
         E2 = E1
-        E1 = Ey[-1]
+        E1 = Ez[-1]
     # Apply the source
-    Ey[n_src] += Esrc[t_i]
+    Ez[n_src] += Esrc[t_i]
 
-    print Ey[n_src]
+    print Ez[n_src]
     # Plot
-    im.set_data(Ey.reshape(Nx,Nz))
+    im.set_data(Ez.reshape(Nx,Ny))
     plt.pause(0.000001)
 
 
