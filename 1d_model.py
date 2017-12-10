@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
 """
@@ -14,6 +15,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.sparse as sp
 import math
+import matplotlib.animation as animation
+#plt.rcParams['animation.ffmpeg_path'] = '/usr/bin/ffmpeg'
 
 ############################################################
 ### Setup ###
@@ -32,11 +35,11 @@ bed_thick = 0.1
 ### Grid Parameters ###
 ermax = max([erice, erbed])                     # maximum relative permittivity
 nmax  = np.sqrt(ermax)                          # maximum refractive index
-NLAM  = 10                                      # grid resolution, resolve nmax with 10pts
+NLAM  = 5                                      # grid resolution, resolve nmax with 10pts
 lam0  = c0/fmax                                 # min wavelength in simulation
 dx,dz = lam0/nmax/NLAM, lam0/nmax/NLAM          # step size in x/z-direction
-Nx,Nz = 200,200                                 # number of x/z points in grid
-X,Z   = dx*np.arange(0,Nx), dz*np.arange(0,Nz)  # X-distance and Z-depth arrays for domain
+Z   = np.arange(0,1.,dz)  # X-distance and Z-depth arrays for domain
+Nz = len(Z)                                 # number of x/z points in grid
 nslab_1 = int(Nz/2)                             # bed start location
 nslab_2 = nslab_1 + math.ceil(bed_thick/dz)  -1      # slab end location
 
@@ -97,14 +100,20 @@ ax.set_ylim(-1.5,1.5)
 ax.set_xlim(min(Z),max(Z))
 
 #plt.fill_betweenx(np.linspace(-5,5,10),Z[nz1],Z[nz2])
-plt.ion()
-H_line, = plt.plot([],[],'r',zorder=1)
-E_line, = plt.plot([],[],'b',zorder=0)
+H_line, = ax.plot([],[],'r',zorder=1)
+E_line, = ax.plot([],[],'b',zorder=0)
+time_text = ax.text(0.02,0.9,'',transform=ax.transAxes)
 
 ############################################################
 ### Algorithm ###
 
-for t_i in np.arange(steps):
+def init():
+    E_line.set_data([],[])
+    H_line.set_data([],[])
+    return E_line, H_line,
+
+#for t_i in np.arange(steps):
+def animate(t_i,Hx=Hx,Ey=Ey,H3=H3,H2=H2,H1=H1,E3=E3,E2=E2,E1=E1):
 
     # Update Magnetic Field
     Hx += (mHx/dz)*(A*Ey)
@@ -128,6 +137,13 @@ for t_i in np.arange(steps):
     E_line.set_ydata(Ey)
     H_line.set_xdata(Z)
     H_line.set_ydata(Hx)
-    plt.pause(0.000001)
+    time_text.set_text('Time Step = %0.0f of %0.0f' % (t_i,t_f))
 
+    return E_line, H_line, time_text
 
+ani = animation.FuncAnimation(fig,animate,init_func=init,frames=np.arange(steps),interval=0.001,blit=True)
+
+# Save the animation
+Writer = animation.writers['ffmpeg']
+writer = Writer(fps=15,metadata=dict(artist='Me'),bitrate=1800)
+ani.save('DirichletBC.mp4',writer=writer)
