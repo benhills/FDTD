@@ -16,7 +16,6 @@ import numpy as np
 import scipy.sparse as sp
 import math
 import matplotlib.animation as animation
-#plt.rcParams['animation.ffmpeg_path'] = '/usr/bin/ffmpeg'
 
 ############################################################
 ### Setup ###
@@ -54,8 +53,8 @@ dt    = nbc*dz/(2*c0)               # time step
 tau   = 0.5/fmax                    # duration of Gaussian source
 t0    = 5.*tau                      # initial time, offset of Gaussian source
 tprop = nmax*Nz*dz/c0               # time for wave accross grid
-t_f     = 2.*t0 + 3.*tprop          # total simulation time
-steps = math.ceil(t_f/dt)           # number of time steps
+t_f     = 2.*t0 + 2.*tprop          # total simulation time
+steps = 500#0.5*1000*math.floor((t_f/dt)/1000.)           # number of time steps
 t     = np.arange(0,steps)*dt       # update simulation time
 
 # Source
@@ -87,37 +86,37 @@ A[-1,:] = 0
 B[0,:] = 0
 
 # Perfectly absorbing BC
-PABC = False
+PABC = True
 H1,H2,H3 = 0,0,0
 E1,E2,E3 = 0,0,0
 
 ############################################################
 ### Figure ###
 
-fig = plt.figure()
+fig = plt.figure(figsize=(8,4))
 ax = plt.subplot()
 ax.set_ylim(-1.5,1.5)
 ax.set_xlim(min(Z),max(Z))
+plt.xlabel('Distance')
+plt.ylabel('Normalized EM Field')
 
 #plt.fill_betweenx(np.linspace(-5,5,10),Z[nz1],Z[nz2])
-H_line, = ax.plot([],[],'r',zorder=1)
-E_line, = ax.plot([],[],'b',zorder=0)
-time_text = ax.text(0.02,0.9,'',transform=ax.transAxes)
+#plt.ion()
+H_line, = ax.plot([],[],'b',zorder=0)
+E_line, = ax.plot([],[],'r',zorder=1)
+time_text = ax.text(0.5,0.9,'',transform=ax.transAxes)
 
 ############################################################
 ### Algorithm ###
 
-def init():
-    E_line.set_data([],[])
-    H_line.set_data([],[])
-    return E_line, H_line,
+E_out = np.empty((steps,len(Ey)))
+H_out = np.empty((steps,len(Hx)))
 
-#for t_i in np.arange(steps):
-def animate(t_i,Hx=Hx,Ey=Ey,H3=H3,H2=H2,H1=H1,E3=E3,E2=E2,E1=E1):
-
+for t_i in np.arange(steps):
     # Update Magnetic Field
     Hx += (mHx/dz)*(A*Ey)
     if PABC == True:
+        Hx[-1] = Hx[-1] + mHx[-1]*(E3 - Ey[-1])/dz
         # Record H-field at Boundary
         H3 = H2
         H2 = H1
@@ -125,6 +124,7 @@ def animate(t_i,Hx=Hx,Ey=Ey,H3=H3,H2=H2,H1=H1,E3=E3,E2=E2,E1=E1):
     # Update Electric Field
     Ey += (mEy/dz)*(B*Hx)
     if PABC == True:
+        Ey[0] = Ey[0] + mEy[0]*(Hx[0] - H3)/dz
         # Record E-field at Boundary
         E3 = E2
         E2 = E1
@@ -132,18 +132,26 @@ def animate(t_i,Hx=Hx,Ey=Ey,H3=H3,H2=H2,H1=H1,E3=E3,E2=E2,E1=E1):
     # Apply the source
     Ey[nz_src] = Ey[nz_src] + Esrc[t_i]
 
-    # Plot
+    # save the fields to an array
+    E_out[t_i] = Ey
+    H_out[t_i] = Hx
+
+############################################################
+
+def init():
+    E_line.set_data([],[])
+    H_line.set_data([],[])
+    return E_line, H_line,
+
+def animate(i):
     E_line.set_xdata(Z)
-    E_line.set_ydata(Ey)
-    H_line.set_xdata(Z)
-    H_line.set_ydata(Hx)
-    time_text.set_text('Time Step = %0.0f of %0.0f' % (t_i,t_f))
+    E_line.set_ydata(E_out[i])
+    H_line.set_xdata(Z+0.5*dz)
+    H_line.set_ydata(H_out[i])
+    time_text.set_text('Time Step = %0.0f of %0.0f' % (i,steps))
+    return E_line, H_line, time_text,
 
-    return E_line, H_line, time_text
-
-ani = animation.FuncAnimation(fig,animate,init_func=init,frames=np.arange(steps),interval=0.001,blit=True)
+ani = animation.FuncAnimation(fig,animate,init_func=init,frames=np.arange(0,steps,2),interval=20,blit=True)
 
 # Save the animation
-Writer = animation.writers['ffmpeg']
-writer = Writer(fps=15,metadata=dict(artist='Me'),bitrate=1800)
-ani.save('DirichletBC.mp4',writer=writer)
+ani.save('PML.mp4',writer="ffmpeg")
