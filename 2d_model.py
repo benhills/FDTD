@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.sparse as sp
 import math
+import matplotlib.animation as animation
 
 ############################################################
 ### Setup ###
@@ -35,7 +36,7 @@ nmax  = np.sqrt(ermax)                          # maximum refractive index
 NLAM  = 10                                      # grid resolution, resolve nmax with 10pts
 lam0  = c0/fmax                                 # min wavelength in simulation
 dx,dy = lam0/nmax/NLAM, lam0/nmax/NLAM          # step size in x/z-direction
-Nx,Ny = 100,100                                 # number of x/z points in grid
+Nx,Ny = 200,200                                 # number of x/z points in grid
 X,Y   = dx*np.arange(0,Nx), dy*np.arange(0,Ny)  # X-distance and Z-depth arrays for domain
 nslab_1 = int(Ny/2)                             # bed start location
 nslab_2 = nslab_1 + math.ceil(bed_thick/dy)  -1      # slab end location
@@ -45,23 +46,24 @@ N = Nx*Ny
 epsz = erice*np.ones(N)              # relative permittivity
 mux = np.ones(N)                    # relative permeability
 muy = np.ones(N)                    # relative permeability
-#Er[nslab_1:nslab_2] = erbed        # relative permittivity in the slab
+
+mux[Nx*120:Nx*140] = 10.        # relative permeability in the anisotropic zone
 
 # Time Domain
 nbc   = np.sqrt(mux[0]*epsz[0])        # refractive index at boundary
 dt    = nbc*dy/(2*c0)               # time step
-tau   = 0.1/fmax                    # duration of Gaussian source
+tau   = 0.2/fmax                    # duration of Gaussian source
 t0    = 2.*tau                      # initial time, offset of Gaussian source
 tprop = nmax*Ny*dy/c0               # time for wave accross grid
 t_f     = 2.*t0 + 3.*tprop          # total simulation time
-steps = math.ceil(t_f/dt)           # number of time steps
+steps = 1000#math.ceil(t_f/dt)           # number of time steps
 t     = np.arange(0,steps)*dt       # update simulation time
 
 # Source
 nx_src = math.ceil(Nx/4.)                   # x Index of Source Location
 ny_src = math.ceil(Ny/4.)                   # y Index of Source Location
 n_src = int(ny_src*Nx+nx_src)
-Esrc   = np.exp(-((t-t0)/tau)**2.)          # Electricity source, Gaussian
+Esrc   = 40*np.exp(-((t-t0)/tau)**2.)          # Electricity source, Gaussian
 
 # Initialize FDTD parametrs
 mEz = (c0*dt)/epsz    # Electricity multiplication parameter
@@ -114,11 +116,15 @@ fig = plt.figure()
 ax = plt.subplot()
 
 plt.ion()
-im = plt.imshow(Ez.reshape(Nx,Ny),vmin=-.02,vmax=.02)
+im = plt.imshow(Ez.reshape(Nx,Ny),vmin=-1.,vmax=1.,cmap='RdYlBu')
+plt.colorbar()
+time_text = ax.text(0.5,1.05,'',ha='center',transform=ax.transAxes)
 
 ############################################################
 
 ### Algorithm ###
+
+E_out = np.empty((steps,len(Ez)))
 
 for t_i in np.arange(steps):
 
@@ -141,9 +147,26 @@ for t_i in np.arange(steps):
     # Apply the source
     Ez[n_src] += Esrc[t_i]
 
-    print Ez[n_src]
     # Plot
-    im.set_data(Ez.reshape(Nx,Ny))
-    plt.pause(0.000001)
+    #im.set_data(Ez.reshape(Nx,Ny))
+    #time_text.set_text('Time Step = %0.0f of %0.0f' % (t_i,steps))
+    #plt.pause(0.000001)
 
+    E_out[t_i] = Ez
+
+############################################################
+
+def init():
+    im.set_data([[],[]])
+    return im,
+
+def animate(i):
+    im.set_data(E_out[i].reshape(Nx,Ny))
+    time_text.set_text('Time Step = %0.0f of %0.0f' % (i,steps))
+    return im, time_text,
+
+ani = animation.FuncAnimation(fig,animate,init_func=init,frames=np.arange(0,steps,2),interval=20,blit=True)
+
+# Save the animation
+ani.save('Anisotropic.mp4',writer="ffmpeg")
 
