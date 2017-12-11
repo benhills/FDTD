@@ -28,24 +28,29 @@ fmax   = 5e9    # Source Frequency 1/s
 
 # bed properties
 erice = 1.          # relative permittivity of ice
-erbed = 12.         # relative permittivity of bed
-bed_thick = 0.1
+erslab = 2.         # relative permittivity of slab
+erbed = 10.         # relative permittivity of bed
+slab_thick = 0.2
 
 ### Grid Parameters ###
 ermax = max([erice, erbed])                     # maximum relative permittivity
 nmax  = np.sqrt(ermax)                          # maximum refractive index
-NLAM  = 5                                      # grid resolution, resolve nmax with 10pts
+NLAM  = 10                                      # grid resolution, resolve nmax with 10pts
 lam0  = c0/fmax                                 # min wavelength in simulation
-dx,dz = lam0/nmax/NLAM, lam0/nmax/NLAM          # step size in x/z-direction
-Z   = np.arange(0,1.,dz)  # X-distance and Z-depth arrays for domain
+dz = lam0/nmax/NLAM          # step size in x/z-direction
+Z   = np.arange(-.5,1.5,dz)  # X-distance and Z-depth arrays for domain
 Nz = len(Z)                                 # number of x/z points in grid
-nslab_1 = int(Nz/2)                             # bed start location
-nslab_2 = nslab_1 + math.ceil(bed_thick/dz)  -1      # slab end location
+nslab_1 = np.argmin(abs(Z-0.5))                             # slab start location
+nslab_2 = nslab_1 + math.ceil(slab_thick/dz)  -1      # slab end location
+nbed_1 = np.argmin(abs(Z-0.9))                              # bed start location
+nbed_2 = -1                              # bed start location
 
 # Initialize material constants
 Er = erice*np.ones(Nz)              # relative permittivity
 Ur = np.ones(Nz)                    # relative permeability
-#Er[nslab_1:nslab_2] = erbed        # relative permittivity in the slab
+# change the permittivity for the slab and for the bed
+Er[nslab_1:nslab_2] = erslab        # relative permittivity in the slab
+Er[nbed_1:nbed_2] = erbed                   # relative permittivity in the bed
 
 # Time Domain
 nbc   = np.sqrt(Ur[0]*Er[0])        # refractive index at boundary
@@ -54,12 +59,11 @@ tau   = 0.5/fmax                    # duration of Gaussian source
 t0    = 5.*tau                      # initial time, offset of Gaussian source
 tprop = nmax*Nz*dz/c0               # time for wave accross grid
 t_f     = 2.*t0 + 2.*tprop          # total simulation time
-steps = 500#0.5*1000*math.floor((t_f/dt)/1000.)           # number of time steps
+steps = 2500#0.5*1000*math.floor((t_f/dt)/1000.)           # number of time steps
 t     = np.arange(0,steps)*dt       # update simulation time
 
 # Source
-nx_src = math.ceil(Nz/2.)                   # Index of Source Location
-nz_src = math.ceil(Nz/2.)                   # Index of Source Location
+nz_src = np.argmin(abs(Z-0.))#math.ceil(Nz/10.)                   # Index of Source Location
 Esrc   = np.exp(-((t-t0)/tau)**2.)          # Electricity source, Gaussian
 
 # Initialize FDTD parametrs
@@ -94,23 +98,38 @@ E1,E2,E3 = 0,0,0
 ### Figure ###
 
 fig = plt.figure(figsize=(8,4))
-ax = plt.subplot()
-ax.set_ylim(-1.5,1.5)
-ax.set_xlim(min(Z),max(Z))
-plt.xlabel('Distance')
-plt.ylabel('Normalized EM Field')
+ax1 = plt.subplot(121)
+ax1.set_xlim(-1.5,1.5)
+ax1.set_ylim(1.,0)
+plt.ylabel('Distance')
+plt.xlabel('Normalized EM Field')
+plt.ion()
+time_text = ax1.text(0.5,1.1,'',ha='center',transform=ax1.transAxes)
 
-#plt.fill_betweenx(np.linspace(-5,5,10),Z[nz1],Z[nz2])
-#plt.ion()
-H_line, = ax.plot([],[],'b',zorder=0)
-E_line, = ax.plot([],[],'r',zorder=1)
-time_text = ax.text(0.5,0.9,'',transform=ax.transAxes)
+ax2 = plt.subplot(122)
+plt.xlim(0,dt*steps)
+plt.ylim(-1,1)
+plt.xlabel('seconds')
+plt.ylabel('E-return')
+
+# fill the bed and slab locations
+ax1.fill_between(np.linspace(-5,5,10),Z[nslab_1],Z[nslab_2],color='k',alpha=0.2)
+ax1.fill_between(np.linspace(-5,5,10),Z[nbed_1],Z[nbed_2],color='k',alpha=0.5)
+# plot Electric and Magnetic field
+H_line, = ax1.plot([],[],'b',zorder=0)
+E_line, = ax1.plot([],[],'r',zorder=1)
+
+# plot the power output through time
+P_line, = ax2.plot([],[],'k')
+
+plt.tight_layout()
 
 ############################################################
 ### Algorithm ###
 
 E_out = np.empty((steps,len(Ey)))
 H_out = np.empty((steps,len(Hx)))
+P_out = [[],[]]
 
 for t_i in np.arange(steps):
     # Update Magnetic Field
@@ -136,22 +155,41 @@ for t_i in np.arange(steps):
     E_out[t_i] = Ey
     H_out[t_i] = Hx
 
+    # Save the E-field at the top to an array
+    P_out[0].append(dt*t_i)
+    P_out[1].append(Ey[nz_src])
+
+    """
+    E_line.set_ydata(Z)
+    E_line.set_xdata(Ey)
+    H_line.set_ydata(Z+0.5*dz)
+    H_line.set_xdata(Hx)
+    P_line.set_xdata(P_out[0])
+    P_line.set_ydata(P_out[1])
+    time_text.set_text('Time Step = %0.0f of %0.0f' % (t_i,steps))
+    plt.pause(0.00001)
+    """
+
 ############################################################
 
 def init():
     E_line.set_data([],[])
     H_line.set_data([],[])
-    return E_line, H_line,
+    P_line.set_data([],[])
+    return E_line, H_line, P_line,
 
 def animate(i):
-    E_line.set_xdata(Z)
-    E_line.set_ydata(E_out[i])
-    H_line.set_xdata(Z+0.5*dz)
-    H_line.set_ydata(H_out[i])
+    E_line.set_ydata(Z)
+    E_line.set_xdata(E_out[i])
+    H_line.set_ydata(Z+0.5*dz)
+    H_line.set_xdata(H_out[i])
+    P_line.set_xdata(P_out[0][:i])
+    P_line.set_ydata(P_out[1][:i])
     time_text.set_text('Time Step = %0.0f of %0.0f' % (i,steps))
-    return E_line, H_line, time_text,
+    return E_line, H_line, P_line, time_text,
 
 ani = animation.FuncAnimation(fig,animate,init_func=init,frames=np.arange(0,steps,2),interval=20,blit=True)
 
 # Save the animation
-ani.save('PML.mp4',writer="ffmpeg")
+ani.save('WithLayers.mp4',writer="ffmpeg")
+
