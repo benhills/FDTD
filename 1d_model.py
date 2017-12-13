@@ -38,7 +38,7 @@ nmax  = np.sqrt(ermax)                          # maximum refractive index
 NLAM  = 10                                      # grid resolution, resolve nmax with 10pts
 lam0  = c0/fmax                                 # min wavelength in simulation
 dz = lam0/nmax/NLAM          # step size in x/z-direction
-Z   = np.arange(-.5,1.5,dz)  # X-distance and Z-depth arrays for domain
+Z   = np.arange(0.,1.,dz)  # X-distance and Z-depth arrays for domain
 Nz = len(Z)                                 # number of x/z points in grid
 nslab_1 = np.argmin(abs(Z-0.5))                             # slab start location
 nslab_2 = nslab_1 + math.ceil(slab_thick/dz)  -1      # slab end location
@@ -49,8 +49,8 @@ nbed_2 = -1                              # bed start location
 Er = erice*np.ones(Nz)              # relative permittivity
 Ur = np.ones(Nz)                    # relative permeability
 # change the permittivity for the slab and for the bed
-Er[nslab_1:nslab_2] = erslab        # relative permittivity in the slab
-Er[nbed_1:nbed_2] = erbed                   # relative permittivity in the bed
+#Er[nslab_1:nslab_2] = erslab        # relative permittivity in the slab
+#Er[nbed_1:nbed_2] = erbed                   # relative permittivity in the bed
 
 # Time Domain
 nbc   = np.sqrt(Ur[0]*Er[0])        # refractive index at boundary
@@ -63,7 +63,8 @@ steps = 2500#0.5*1000*math.floor((t_f/dt)/1000.)           # number of time step
 t     = np.arange(0,steps)*dt       # update simulation time
 
 # Source
-nz_src = np.argmin(abs(Z-0.))#math.ceil(Nz/10.)                   # Index of Source Location
+nz_src = math.ceil(Nz/2.)                   # Index of Source Location
+#nz_src = np.argmin(abs(Z-0.))
 Esrc   = np.exp(-((t-t0)/tau)**2.)          # Electricity source, Gaussian
 
 # Initialize FDTD parametrs
@@ -90,20 +91,21 @@ A[-1,:] = 0
 B[0,:] = 0
 
 # Perfectly absorbing BC
-PABC = True
+PABC = False
 H1,H2,H3 = 0,0,0
 E1,E2,E3 = 0,0,0
 
 ############################################################
 ### Figure ###
 
-fig = plt.figure(figsize=(8,4))
-ax1 = plt.subplot(121)
-ax1.set_xlim(-1.5,1.5)
-ax1.set_ylim(1.,0)
-plt.ylabel('Distance')
-plt.xlabel('Normalized EM Field')
-plt.ion()
+"""
+fig = plt.figure(figsize=(12,12))
+ax1 = plt.subplot(111)
+ax1.set_ylim(-1.5,1.5)
+ax1.set_xlim(1.,0)
+plt.xlabel('Distance')
+plt.ylabel('Normalized EM Field')
+#plt.ion()
 time_text = ax1.text(0.5,1.1,'',ha='center',transform=ax1.transAxes)
 
 ax2 = plt.subplot(122)
@@ -113,17 +115,18 @@ plt.xlabel('seconds')
 plt.ylabel('E-return')
 
 # fill the bed and slab locations
-ax1.fill_between(np.linspace(-5,5,10),Z[nslab_1],Z[nslab_2],color='k',alpha=0.2)
-ax1.fill_between(np.linspace(-5,5,10),Z[nbed_1],Z[nbed_2],color='k',alpha=0.5)
+#ax1.fill_between(np.linspace(-5,5,10),Z[nslab_1],Z[nslab_2],color='k',alpha=0.2)
+#ax1.fill_between(np.linspace(-5,5,10),Z[nbed_1],Z[nbed_2],color='k',alpha=0.5)
 # plot Electric and Magnetic field
 H_line, = ax1.plot([],[],'b',zorder=0)
 E_line, = ax1.plot([],[],'r',zorder=1)
 
 # plot the power output through time
-P_line, = ax2.plot([],[],'k')
+#P_line, = ax2.plot([],[],'k')
 
 plt.tight_layout()
 
+"""
 ############################################################
 ### Algorithm ###
 
@@ -158,20 +161,63 @@ for t_i in np.arange(steps):
     # Save the E-field at the top to an array
     P_out[0].append(dt*t_i)
     P_out[1].append(Ey[nz_src])
-
     """
-    E_line.set_ydata(Z)
-    E_line.set_xdata(Ey)
-    H_line.set_ydata(Z+0.5*dz)
-    H_line.set_xdata(Hx)
-    P_line.set_xdata(P_out[0])
-    P_line.set_ydata(P_out[1])
-    time_text.set_text('Time Step = %0.0f of %0.0f' % (t_i,steps))
+    E_line.set_xdata(Z)
+    E_line.set_ydata(Ey)
+    H_line.set_xdata(Z+0.5*dz)
+    H_line.set_ydata(Hx)
+    #P_line.set_xdata(P_out[0])
+    #P_line.set_ydata(P_out[1])
+    #time_text.set_text('Time Step = %0.0f of %0.0f' % (t_i,steps))
     plt.pause(0.00001)
     """
+fig = plt.figure(figsize=(12,9))
+
+i = int(steps/20)
+ax1 = plt.subplot(411)
+ax1.set_ylim(-1.5,1.5)
+ax1.set_xlim(0.,1.)
+ax1.tick_params(which='both',labelbottom='off')
+plt.plot(Z+0.5*dz,H_out[i],'b')
+plt.plot(Z,E_out[i],'r')
+ax1.text(0.04,0.85,'(a)',size='large',weight='bold',ha='center',transform=ax1.transAxes)
+time_text = ax1.text(0.8,0.85,'%0.2E sec'%t[i],ha='center',transform=ax1.transAxes)
+
+i = int(2*steps/20)
+ax2 = plt.subplot(412)
+ax2.set_ylim(-1.5,1.5)
+ax2.set_xlim(0.,1.)
+ax2.tick_params(which='both',labelbottom='off')
+plt.plot(Z+0.5*dz,H_out[i],'b')
+plt.plot(Z,E_out[i],'r')
+ax2.text(0.04,0.85,'(b)',size='large',weight='bold',ha='center',transform=ax2.transAxes)
+time_text = ax2.text(0.8,0.85,'%0.2E sec'%t[i],ha='center',transform=ax2.transAxes)
+
+i = int(5.5*steps/20)
+ax3 = plt.subplot(413)
+ax3.set_ylim(-1.5,1.5)
+ax3.set_xlim(0.,1.)
+ax3.tick_params(which='both',labelbottom='off')
+plt.plot(Z+0.5*dz,H_out[i],'b')
+plt.plot(Z,E_out[i],'r')
+ax3.text(0.04,0.85,'(c)',size='large',weight='bold',ha='center',transform=ax3.transAxes)
+time_text = ax3.text(0.8,0.85,'%0.2E sec'%t[i],ha='center',transform=ax3.transAxes)
+
+i = int(6.5*steps/20)
+ax4 = plt.subplot(414)
+ax4.set_ylim(-1.5,1.5)
+ax4.set_xlim(0.,1.)
+plt.xlabel('Distance')
+plt.ylabel('Normalized EM Field')
+plt.plot(Z+0.5*dz,H_out[i],'b')
+plt.plot(Z,E_out[i],'r')
+ax4.text(0.04,0.85,'(d)',size='large',weight='bold',ha='center',transform=ax4.transAxes)
+time_text = ax4.text(0.8,0.85,'%0.2E sec'%t[i],ha='center',transform=ax4.transAxes)
+
+plt.savefig('DirichletBC.png',dpi=300)
 
 ############################################################
-
+"""
 def init():
     E_line.set_data([],[])
     H_line.set_data([],[])
@@ -192,4 +238,4 @@ ani = animation.FuncAnimation(fig,animate,init_func=init,frames=np.arange(0,step
 
 # Save the animation
 ani.save('WithLayers.mp4',writer="ffmpeg")
-
+"""
