@@ -1,0 +1,126 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.8 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \sortlist[entry]{nty/global/}
+    \entry{Christianson2016}{article}{}
+      \name{author}{7}{}{%
+        {{uniquename=0,hash=348e06d90cb1b2ec62b7b61595a3a132}{%
+           family={Christianson},
+           familyi={C\bibinitperiod},
+           given={Knut},
+           giveni={K\bibinitperiod}}}%
+        {{uniquename=0,hash=29ba5dc4ed27ca18a1a865c934a35875}{%
+           family={Jacobel},
+           familyi={J\bibinitperiod},
+           given={Robert\bibnamedelima W.},
+           giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{uniquename=0,hash=2d9dc32d0e8033bb912c6aeebca8d2d1}{%
+           family={Horgan},
+           familyi={H\bibinitperiod},
+           given={Huw\bibnamedelima J.},
+           giveni={H\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{uniquename=0,hash=ac8b3feef4ab3d2fef8d3c455726c6d5}{%
+           family={Alley},
+           familyi={A\bibinitperiod},
+           given={Richard\bibnamedelima B.},
+           giveni={R\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{uniquename=0,hash=f1311dabbc3541658b08543478f6f94e}{%
+           family={Anandakrishnan},
+           familyi={A\bibinitperiod},
+           given={Sridhar},
+           giveni={S\bibinitperiod}}}%
+        {{uniquename=0,hash=bfc9ba16571a7d8e3f68d9db9148f21e}{%
+           family={Holland},
+           familyi={H\bibinitperiod},
+           given={David\bibnamedelima M.},
+           giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{uniquename=0,hash=83e13f0de0ef5812f995f7d4c2948744}{%
+           family={Dallasanta},
+           familyi={D\bibinitperiod},
+           given={Kevin\bibnamedelima J.},
+           giveni={K\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{4bc86af2825a50651b2526e3a4120759}
+      \strng{fullhash}{477f2b2f326c97e8f6f70eccab602e04}
+      \strng{authornamehash}{4bc86af2825a50651b2526e3a4120759}
+      \strng{authorfullhash}{477f2b2f326c97e8f6f70eccab602e04}
+      \field{sortinit}{C}
+      \field{sortinithash}{095692fd22cc3c74d7fe223d02314dbd}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{21699011}
+      \field{journaltitle}{Journal of Geophysical Research F: Earth Surface}
+      \field{title}{{Basal conditions at the grounding zone of Whillans Ice Stream, West Antarctica, from ice-penetrating radar}}
+      \field{year}{2016}
+      \field{pages}{1954\bibrangedash 1983}
+      \range{pages}{30}
+      \verb{doi}
+      \verb 10.1002/2015JF003806
+      \endverb
+      \verb{file}
+      \verb :Users/new/Library/Application Support/Mendeley Desktop/Downloaded/Christianson et al. - 2016 - Basal conditions at the grounding zone of Whillans Ice Stream, West Antarctica, from ice-penetrating rad(2).pdf:pdf
+      \endverb
+      \keyw{Grounding zone,Ice shelf,Ice stream,Ice-penetrating radar,Ice/ocean interactions}
+    \endentry
+    \entry{Irving2006}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=211dcd05221c71d730ff7b0f278d5af1}{%
+           family={Irving},
+           familyi={I\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod}}}%
+        {{uniquename=0,hash=87f990aa94ecb3c79d46745218d56cf9}{%
+           family={Knight},
+           familyi={K\bibinitperiod},
+           given={Rosemary},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{f75e3e53d8e1afbdf657e44d6cb52f65}
+      \strng{fullhash}{f75e3e53d8e1afbdf657e44d6cb52f65}
+      \strng{authornamehash}{f75e3e53d8e1afbdf657e44d6cb52f65}
+      \strng{authorfullhash}{f75e3e53d8e1afbdf657e44d6cb52f65}
+      \field{sortinit}{I}
+      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We present MATLAB codes for finite-difference time-domain (FDTD) modeling of ground-penetrating radar (GPR) in two dimensions. Surface-based reflection GPR is modeled using a transverse magnetic (TM-) mode formulation. Crosshole and vertical radar profiling (VRP) geometries are modeled using a transverse electric (TE-) mode formulation. Matrix notation is used in the codes wherever possible to optimize them for speed in the MATLAB environment. To absorb waves at the edges of the modeling grid, we implement perfectly matched layer (PML) absorbing boundaries. Although our codes are two-dimensional and do not incorporate features such as dispersion in electrical properties, they capture many of the important elements of GPR surveying and run at a fraction of the computational cost of more elaborate algorithms. In addition, the codes are well commented, relatively easy to understand, and can be easily modified for the user's specific purpose. {©} 2005 Elsevier Ltd. All rights reserved.}
+      \field{isbn}{0098-3004}
+      \field{issn}{00983004}
+      \field{journaltitle}{Computers and Geosciences}
+      \field{number}{9}
+      \field{title}{{Numerical modeling of ground-penetrating radar in 2-D using MATLAB}}
+      \field{volume}{32}
+      \field{year}{2006}
+      \field{pages}{1247\bibrangedash 1258}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1016/j.cageo.2005.11.006
+      \endverb
+      \verb{file}
+      \verb :Users/new/Documents/Literature/Irving(2006){\_}FDTDmodel.pdf:pdf
+      \endverb
+      \keyw{Electromagnetics,FDTD,Finite-difference time domain,GPR,Ground-penetrating radar,Numerical modeling}
+    \endentry
+  \endsortlist
+\endrefsection
+\endinput
+

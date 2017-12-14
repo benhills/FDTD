@@ -1,0 +1,17 @@
+[1] Config.pm:354> INFO - This is Biber 2.7
+[9] Config.pm:357> INFO - Logfile is 'FDTD_paper.blg'
+[141] biber-darwin:303> INFO - === Tue Dec 12, 2017, 22:57:49
+[293] Biber.pm:359> INFO - Reading 'FDTD_paper.bcf'
+[449] Biber.pm:835> INFO - Found 2 citekeys in bib section 0
+[482] Biber.pm:3670> INFO - Processing section 0
+[552] Biber.pm:3840> INFO - Looking for bibtex format file 'FDTD_paper.bib' for section 0
+[568] bibtex.pm:1435> INFO - Decoding LaTeX character macros into UTF-8
+[585] bibtex.pm:1292> INFO - Found BibTeX data source 'FDTD_paper.bib'
+[658] Utils.pm:164> WARN - ISBN '0098-3004' in entry 'Irving2006' is invalid - run biber with '--validate_datamodel' for details.
+[704] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[704] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[704] Biber.pm:3499> INFO - Sorting list 'nty/global/' of type 'entry' with scheme 'nty' and locale 'en-US'
+[705] Biber.pm:3505> INFO - No sort tailoring available for locale 'en-US'
+[712] bbl.pm:608> INFO - Writing 'FDTD_paper.bbl' with encoding 'UTF-8'
+[713] bbl.pm:712> INFO - Output to FDTD_paper.bbl
+[713] Biber.pm:109> INFO - WARNINGS: 1
