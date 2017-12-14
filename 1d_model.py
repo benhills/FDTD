@@ -24,13 +24,12 @@ import matplotlib.animation as animation
 c0 = 3e8        # Speed of Light m/s
 e0 = 8.85e-12   # free space permittivity 1/m
 u0 = 1.26e-6    # free space permeability 1/m
-fmax   = 5e9    # Source Frequency 1/s
+fmax   = 30e6    # Source Frequency 1/s
 
 # bed properties
-erice = 1.          # relative permittivity of ice
-erslab = 2.         # relative permittivity of slab
-erbed = 10.         # relative permittivity of bed
-slab_thick = 0.2
+erice = 3.2          # relative permittivity of ice
+erdebris = 2.         # relative permittivity of debris laden ice
+erbed = 12.         # relative permittivity of bed
 
 ### Grid Parameters ###
 ermax = max([erice, erbed])                     # maximum relative permittivity
@@ -38,19 +37,19 @@ nmax  = np.sqrt(ermax)                          # maximum refractive index
 NLAM  = 10                                      # grid resolution, resolve nmax with 10pts
 lam0  = c0/fmax                                 # min wavelength in simulation
 dz = lam0/nmax/NLAM          # step size in x/z-direction
-Z   = np.arange(0.,1.,dz)  # X-distance and Z-depth arrays for domain
+zmax = 100.
+Z   = np.arange(-zmax/2.,1.5*zmax,dz)  # X-distance and Z-depth arrays for domain
 Nz = len(Z)                                 # number of x/z points in grid
-nslab_1 = np.argmin(abs(Z-0.5))                             # slab start location
-nslab_2 = nslab_1 + math.ceil(slab_thick/dz)  -1      # slab end location
-nbed_1 = np.argmin(abs(Z-0.9))                              # bed start location
+nbed_1 = np.argmin(abs(Z-0.8*zmax))                              # bed start location
 nbed_2 = -1                              # bed start location
 
 # Initialize material constants
 Er = erice*np.ones(Nz)              # relative permittivity
-Ur = np.ones(Nz)                    # relative permeability
-# change the permittivity for the slab and for the bed
-#Er[nslab_1:nslab_2] = erslab        # relative permittivity in the slab
-#Er[nbed_1:nbed_2] = erbed                   # relative permittivity in the bed
+Ur = (1/erice)*np.ones(Nz)                    # relative permeability
+# change the permittivity for some random layers that have debris and for the bed
+rand_ind  = np.where(np.random.rand(Nz)>0.8)
+Er[rand_ind] = erdebris       # relative permittivity in the slab
+Er[nbed_1:nbed_2] = erbed                   # relative permittivity in the bed
 
 # Time Domain
 nbc   = np.sqrt(Ur[0]*Er[0])        # refractive index at boundary
@@ -58,13 +57,13 @@ dt    = nbc*dz/(2*c0)               # time step
 tau   = 0.5/fmax                    # duration of Gaussian source
 t0    = 5.*tau                      # initial time, offset of Gaussian source
 tprop = nmax*Nz*dz/c0               # time for wave accross grid
-t_f     = 2.*t0 + 2.*tprop          # total simulation time
-steps = 2500#0.5*1000*math.floor((t_f/dt)/1000.)           # number of time steps
+t_f     = 2.*t0 + 0.3*tprop          # total simulation time
+steps = math.floor((t_f/dt))           # number of time steps
 t     = np.arange(0,steps)*dt       # update simulation time
 
 # Source
-nz_src = math.ceil(Nz/2.)                   # Index of Source Location
-#nz_src = np.argmin(abs(Z-0.))
+#nz_src = math.ceil(Nz/2.)                   # Index of Source Location (centered)
+nz_src = np.argmin(abs(Z-0.))               # Source at the start
 Esrc   = np.exp(-((t-t0)/tau)**2.)          # Electricity source, Gaussian
 
 # Initialize FDTD parametrs
@@ -91,7 +90,7 @@ A[-1,:] = 0
 B[0,:] = 0
 
 # Perfectly absorbing BC
-PABC = False
+PABC = True
 H1,H2,H3 = 0,0,0
 E1,E2,E3 = 0,0,0
 
@@ -99,13 +98,13 @@ E1,E2,E3 = 0,0,0
 ### Figure ###
 
 """
-fig = plt.figure(figsize=(12,12))
+fig = plt.figure(figsize=(6,6))
 ax1 = plt.subplot(111)
-ax1.set_ylim(-1.5,1.5)
-ax1.set_xlim(1.,0)
-plt.xlabel('Distance')
-plt.ylabel('Normalized EM Field')
-#plt.ion()
+ax1.set_xlim(-1.5,1.5)
+ax1.set_ylim(1.,0)
+plt.ylabel('Distance')
+plt.xlabel('Normalized EM Field')
+plt.ion()
 time_text = ax1.text(0.5,1.1,'',ha='center',transform=ax1.transAxes)
 
 ax2 = plt.subplot(122)
@@ -114,19 +113,20 @@ plt.ylim(-1,1)
 plt.xlabel('seconds')
 plt.ylabel('E-return')
 
-# fill the bed and slab locations
-#ax1.fill_between(np.linspace(-5,5,10),Z[nslab_1],Z[nslab_2],color='k',alpha=0.2)
-#ax1.fill_between(np.linspace(-5,5,10),Z[nbed_1],Z[nbed_2],color='k',alpha=0.5)
+# fill the bed and debris locations
+for i in rand_ind[0]:
+    ax1.axhline(Z[i],c='k',alpha=0.2)
+ax1.fill_between(np.linspace(-5,5,10),Z[nbed_1],Z[nbed_2],color='k',zorder=0)
 # plot Electric and Magnetic field
-H_line, = ax1.plot([],[],'b',zorder=0)
-E_line, = ax1.plot([],[],'r',zorder=1)
+H_line, = ax1.plot([],[],'b',zorder=1)
+E_line, = ax1.plot([],[],'r',zorder=2)
 
 # plot the power output through time
 #P_line, = ax2.plot([],[],'k')
 
-plt.tight_layout()
-
+#plt.tight_layout()
 """
+
 ############################################################
 ### Algorithm ###
 
@@ -155,66 +155,93 @@ for t_i in np.arange(steps):
     Ey[nz_src] = Ey[nz_src] + Esrc[t_i]
 
     # save the fields to an array
-    E_out[t_i] = Ey
-    H_out[t_i] = Hx
+    #E_out[t_i] = Ey
+    #H_out[t_i] = Hx/erice
 
     # Save the E-field at the top to an array
     P_out[0].append(dt*t_i)
     P_out[1].append(Ey[nz_src])
     """
-    E_line.set_xdata(Z)
-    E_line.set_ydata(Ey)
-    H_line.set_xdata(Z+0.5*dz)
-    H_line.set_ydata(Hx)
+    E_line.set_ydata(Z)
+    E_line.set_xdata(Ey)
+    H_line.set_ydata(Z+0.5*dz)
+    H_line.set_xdata(Hx/erice)
     #P_line.set_xdata(P_out[0])
     #P_line.set_ydata(P_out[1])
     #time_text.set_text('Time Step = %0.0f of %0.0f' % (t_i,steps))
     plt.pause(0.00001)
     """
-fig = plt.figure(figsize=(12,9))
+    print t_i, steps
 
-i = int(steps/20)
-ax1 = plt.subplot(411)
-ax1.set_ylim(-1.5,1.5)
-ax1.set_xlim(0.,1.)
-ax1.tick_params(which='both',labelbottom='off')
-plt.plot(Z+0.5*dz,H_out[i],'b')
-plt.plot(Z,E_out[i],'r')
-ax1.text(0.04,0.85,'(a)',size='large',weight='bold',ha='center',transform=ax1.transAxes)
-time_text = ax1.text(0.8,0.85,'%0.2E sec'%t[i],ha='center',transform=ax1.transAxes)
+    if t_i == int(steps/10):
+        fig = plt.figure(figsize=(12,9))
 
-i = int(2*steps/20)
-ax2 = plt.subplot(412)
-ax2.set_ylim(-1.5,1.5)
-ax2.set_xlim(0.,1.)
-ax2.tick_params(which='both',labelbottom='off')
-plt.plot(Z+0.5*dz,H_out[i],'b')
-plt.plot(Z,E_out[i],'r')
-ax2.text(0.04,0.85,'(b)',size='large',weight='bold',ha='center',transform=ax2.transAxes)
-time_text = ax2.text(0.8,0.85,'%0.2E sec'%t[i],ha='center',transform=ax2.transAxes)
+        import matplotlib.gridspec as gridspec
 
-i = int(5.5*steps/20)
-ax3 = plt.subplot(413)
-ax3.set_ylim(-1.5,1.5)
-ax3.set_xlim(0.,1.)
-ax3.tick_params(which='both',labelbottom='off')
-plt.plot(Z+0.5*dz,H_out[i],'b')
-plt.plot(Z,E_out[i],'r')
-ax3.text(0.04,0.85,'(c)',size='large',weight='bold',ha='center',transform=ax3.transAxes)
-time_text = ax3.text(0.8,0.85,'%0.2E sec'%t[i],ha='center',transform=ax3.transAxes)
+        gs = gridspec.GridSpec(4,4)
 
-i = int(6.5*steps/20)
-ax4 = plt.subplot(414)
-ax4.set_ylim(-1.5,1.5)
-ax4.set_xlim(0.,1.)
-plt.xlabel('Distance')
-plt.ylabel('Normalized EM Field')
-plt.plot(Z+0.5*dz,H_out[i],'b')
-plt.plot(Z,E_out[i],'r')
-ax4.text(0.04,0.85,'(d)',size='large',weight='bold',ha='center',transform=ax4.transAxes)
-time_text = ax4.text(0.8,0.85,'%0.2E sec'%t[i],ha='center',transform=ax4.transAxes)
+        ax1 = plt.subplot(gs[:3,0])
+        ax1.set_xlim(-1.5,1.5)
+        ax1.set_ylim(zmax,0.)
+        plt.ylabel('Depth')
+        plt.xlabel('Normalized EM Field')
+        plt.plot(Hx/erice,Z+0.5*dz,'b')
+        plt.plot(Ey,Z,'r')
+        for zi in rand_ind[0]:
+            ax1.axhline(Z[zi],c='k',alpha=0.2)
+        ax1.fill_between(np.linspace(-5,5,10),Z[nbed_1],Z[nbed_2],color='k',zorder=0)
+        ax1.text(0.1,0.95,'(a)',size='large',weight='bold',ha='center',transform=ax1.transAxes)
+        plt.title('%0.2E sec'%t[t_i])
 
-plt.savefig('DirichletBC.png',dpi=300)
+    elif t_i == int(3*steps/10):
+        ax2 = plt.subplot(gs[:3,1])
+        ax2.set_xlim(-1.5,1.5)
+        ax2.set_ylim(zmax,0.)
+        ax2.tick_params(which='both',labelleft='off')
+        plt.plot(Hx/erice,Z+0.5*dz,'b')
+        plt.plot(Ey,Z,'r')
+        for zi in rand_ind[0]:
+            ax2.axhline(Z[zi],c='k',alpha=0.2)
+        ax2.fill_between(np.linspace(-5,5,10),Z[nbed_1],Z[nbed_2],color='k',zorder=0)
+        ax2.text(0.1,0.95,'(b)',size='large',weight='bold',ha='center',transform=ax2.transAxes)
+        plt.title('%0.2E sec'%t[t_i])
+
+    elif t_i == int(5*steps/10):
+        ax3 = plt.subplot(gs[:3,2])
+        ax3.set_xlim(-1.5,1.5)
+        ax3.set_ylim(zmax,0.)
+        ax3.tick_params(which='both',labelleft='off')
+        plt.plot(Hx/erice,Z+0.5*dz,'b')
+        plt.plot(Ey,Z,'r')
+        for zi in rand_ind[0]:
+            ax3.axhline(Z[zi],c='k',alpha=0.2)
+        ax3.fill_between(np.linspace(-5,5,10),Z[nbed_1],Z[nbed_2],color='k',zorder=0)
+        ax3.text(0.1,0.95,'(c)',size='large',weight='bold',ha='center',transform=ax3.transAxes)
+        plt.title('%0.2E sec'%t[t_i])
+
+    elif t_i == int(7*steps/10):
+        ax4 = plt.subplot(gs[:3,3])
+        ax4.set_xlim(-1.5,1.5)
+        ax4.set_ylim(zmax,0.)
+        ax4.tick_params(which='both',labelleft='off')
+        plt.plot(Hx/erice,Z+0.5*dz,'b')
+        plt.plot(Ey,Z,'r')
+        for zi in rand_ind[0]:
+            ax4.axhline(Z[zi],c='k',alpha=0.2)
+        ax4.fill_between(np.linspace(-5,5,10),Z[nbed_1],Z[nbed_2],color='k',zorder=0)
+        ax4.text(0.1,0.95,'(d)',size='large',weight='bold',ha='center',transform=ax4.transAxes)
+        plt.title('%0.2E sec'%t[t_i])
+
+ax5 = plt.subplot(gs[3,:])
+ax5.set_ylim(-1.,1.)
+plt.plot(P_out[0],P_out[1])
+ax5.text(0.04,0.85,'(e)',size='large',weight='bold',ha='center',transform=ax5.transAxes)
+plt.ylabel('E-return')
+plt.xlabel('seconds')
+
+plt.tight_layout()
+
+plt.savefig('IceSimulation.png',dpi=300)
 
 ############################################################
 """
