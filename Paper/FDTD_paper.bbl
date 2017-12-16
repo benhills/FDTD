@@ -80,6 +80,94 @@
       \endverb
       \keyw{Grounding zone,Ice shelf,Ice stream,Ice-penetrating radar,Ice/ocean interactions}
     \endentry
+    \entry{Dowdeswell2004}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=11401f77c6c3be485d6fcc76e27f80f1}{%
+           family={Dowdeswell},
+           familyi={D\bibinitperiod},
+           given={J\bibnamedelima A},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{uniquename=0,hash=7c14749b32c28b5097f33f21c066218e}{%
+           family={Evans},
+           familyi={E\bibinitperiod},
+           given={S},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{c87c6735c5b71881d89e486004c9a0a0}
+      \strng{fullhash}{b3e557ce0fce83a0a0e5b036c6f0f8df}
+      \strng{authornamehash}{c87c6735c5b71881d89e486004c9a0a0}
+      \strng{authorfullhash}{b3e557ce0fce83a0a0e5b036c6f0f8df}
+      \field{sortinit}{D}
+      \field{sortinithash}{d10b5413de1f3d197b20897dd0d565bb}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Radio-echo sounding (RES), utilizing a variety of radio frequencies, was developed to allow glaciologists to measure the thickness of ice sheets and glaciers. We review the nature of electromagnetic wave propagation in ice and snow, including the permittivity of ice, signal attenuation and volume scattering, along with reflection from rough and specular surfaces. The variety of instruments used in RES of polar ice sheets and temperate glaciers is discussed. The applications and insights that a knowledge of ice thickness, and the wider nature of the form and flow of ice sheets, provides are also considered. The thickest ice measured is 4.7 km in East Antarctica. The morphology of the Antarctic and Greenland ice sheets, and many of the smaller ice caps and glaciers of the polar regions, has been investigated using RES. These findings are being used in three-dimensional numerical models of the response of the cryosphere to environmental change. In addition, the distribution and character of internal and basal reflectors within ice sheets contains information on, for example, ice-sheet layering and its chrono-stratigraphic significance, and has enabled the discovery and investigation of large lakes beneath the Antarctic Ice Sheet. Today, RES from ground-based and airborne platforms remains the most effective tool for measuring ice thickness and internal character.}
+      \field{isbn}{10.1088/0034-4885/67/10/R03}
+      \field{issn}{0034-4885}
+      \field{journaltitle}{Reports on Progress in Physics}
+      \field{number}{10}
+      \field{title}{{Investigations of the form and flow of ice sheets and glaciers using radio-echo sounding}}
+      \field{volume}{67}
+      \field{year}{2004}
+      \field{pages}{1821\bibrangedash 1861}
+      \range{pages}{41}
+      \verb{doi}
+      \verb 10.1088/0034-4885/67/10/R03
+      \endverb
+      \verb{file}
+      \verb :Users/new/Documents/Literature/Dowdeswell, Evans - 2004 - Investigations of the form and flow of ice sheets and glaciers using radio-echo sounding.pdf:pdf
+      \endverb
+      \verb{url}
+      \verb http://stacks.iop.org/0034-4885/67/i=10/a=R03?key=crossref.98d6a08b2d47f42afb6da040e51b2ab8
+      \endverb
+    \endentry
+    \entry{Evans1961}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=b53582847e7bca13be81cbb7a1028f45}{%
+           family={Evans},
+           familyi={E\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{b53582847e7bca13be81cbb7a1028f45}
+      \strng{fullhash}{b53582847e7bca13be81cbb7a1028f45}
+      \strng{authornamehash}{b53582847e7bca13be81cbb7a1028f45}
+      \strng{authorfullhash}{b53582847e7bca13be81cbb7a1028f45}
+      \field{sortinit}{E}
+      \field{sortinithash}{07bbd5a529b5beaa311df5be05b874bc}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Geophysical Research}
+      \field{number}{12}
+      \field{title}{{Polar Ionospheric Spread Echos and Radio Frequency Properties of Ice Shelves}}
+      \field{volume}{66}
+      \field{year}{1961}
+      \field{pages}{4137\bibrangedash 4141}
+      \range{pages}{5}
+      \verb{file}
+      \verb :Users/new/Documents/Literature/Evans-1961-Journal{\_}of{\_}Geophysical{\_}Research.pdf:pdf
+      \endverb
+    \endentry
+    \entry{Griffiths1981}{book}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=72c1438f0d72a4c12b5c7ac4099e6b1d}{%
+           family={Griffiths},
+           familyi={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{72c1438f0d72a4c12b5c7ac4099e6b1d}
+      \strng{fullhash}{72c1438f0d72a4c12b5c7ac4099e6b1d}
+      \strng{authornamehash}{72c1438f0d72a4c12b5c7ac4099e6b1d}
+      \strng{authorfullhash}{72c1438f0d72a4c12b5c7ac4099e6b1d}
+      \field{sortinit}{G}
+      \field{sortinithash}{618d986594b7198ba52cf8b00d348f3f}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{Introduction to Electrodynamics}}
+      \field{year}{1981}
+    \endentry
     \entry{Irving2006}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=211dcd05221c71d730ff7b0f278d5af1}{%
@@ -93,9 +181,9 @@
            given={Rosemary},
            giveni={R\bibinitperiod}}}%
       }
-      \strng{namehash}{f75e3e53d8e1afbdf657e44d6cb52f65}
+      \strng{namehash}{2265236f7f74b6327916edd5b953028e}
       \strng{fullhash}{f75e3e53d8e1afbdf657e44d6cb52f65}
-      \strng{authornamehash}{f75e3e53d8e1afbdf657e44d6cb52f65}
+      \strng{authornamehash}{2265236f7f74b6327916edd5b953028e}
       \strng{authorfullhash}{f75e3e53d8e1afbdf657e44d6cb52f65}
       \field{sortinit}{I}
       \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
@@ -119,6 +207,408 @@
       \verb :Users/new/Documents/Literature/Irving(2006){\_}FDTDmodel.pdf:pdf
       \endverb
       \keyw{Electromagnetics,FDTD,Finite-difference time domain,GPR,Ground-penetrating radar,Numerical modeling}
+    \endentry
+    \entry{Kingslake2014}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,hash=3cf225925c5d00006efade7707f1199f}{%
+           family={Kingslake},
+           familyi={K\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+        {{uniquename=0,hash=0b2e60723ae12752f0facf106410f94e}{%
+           family={Hindmarsh},
+           familyi={H\bibinitperiod},
+           given={Richard\bibnamedelimb C\bibnamedelima A},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{uniquename=0,hash=c583ecbdbcacf36aa859ed56d51f4913}{%
+           family={Conway},
+           familyi={C\bibinitperiod},
+           given={Howard},
+           giveni={H\bibinitperiod}}}%
+        {{uniquename=0,hash=4cd7411b65e750c0fb7ad5fe5895e5d7}{%
+           family={Pritchard},
+           familyi={P\bibinitperiod},
+           given={Hamish\bibnamedelima D},
+           giveni={H\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{fbfcf1c987db020697ff739a4d8c5ac7}
+      \strng{fullhash}{831570b53d8acc99e794eebe49c0dd7f}
+      \strng{authornamehash}{fbfcf1c987db020697ff739a4d8c5ac7}
+      \strng{authorfullhash}{831570b53d8acc99e794eebe49c0dd7f}
+      \field{sortinit}{K}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{21699003}
+      \field{title}{{Journal of Geophysical Research : Earth Surface}}
+      \field{year}{2014}
+      \field{pages}{1\bibrangedash 15}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1002/2014JF003275.Received
+      \endverb
+      \verb{file}
+      \verb :Users/new/Documents/Literature/Kingslake(2014).pdf:pdf
+      \endverb
+      \keyw{10.1002/2015JF003581 and Amazon basin,10Be/9Be ratio,denudation,meteoric cosmogenic nuclides,sediment tranport,weathering}
+    \endentry
+    \entry{MacGregor2012}{article}{}
+      \name{author}{5}{uniquelist=2}{%
+        {{uniquename=0,hash=9bf140a77f1ea236e7e39553a1e15c43}{%
+           family={MacGregor},
+           familyi={M\bibinitperiod},
+           given={Joseph\bibnamedelima A.},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{uniquename=0,hash=46f961f16ae52574cb2590442f516da6}{%
+           family={Matsuoka},
+           familyi={M\bibinitperiod},
+           given={Kenichi},
+           giveni={K\bibinitperiod}}}%
+        {{uniquename=0,hash=5ebbb09a9e13f0d0072be65db2841713}{%
+           family={Waddington},
+           familyi={W\bibinitperiod},
+           given={Edwin\bibnamedelima D.},
+           giveni={E\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{uniquename=0,hash=2339b83354aababba5bbc786eb9ab531}{%
+           family={Winebrenner},
+           familyi={W\bibinitperiod},
+           given={Dale\bibnamedelima P.},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{uniquename=0,hash=2120a89ab52f4a118481d9b34d21ee2b}{%
+           family={Pattyn},
+           familyi={P\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{b882c842c0ced4a9a0166272333f53ad}
+      \strng{fullhash}{5850ec283cfae980f63b3326c6e7035b}
+      \strng{authornamehash}{b882c842c0ced4a9a0166272333f53ad}
+      \strng{authorfullhash}{5850ec283cfae980f63b3326c6e7035b}
+      \field{sortinit}{M}
+      \field{sortinithash}{c26a05ef03e4429073ed5c825140fac3}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{21699011}
+      \field{journaltitle}{Journal of Geophysical Research: Earth Surface}
+      \field{number}{3}
+      \field{title}{{Spatial variation of englacial radar attenuation: Modeling approach and application to the Vostok flowline}}
+      \field{volume}{117}
+      \field{year}{2012}
+      \field{pages}{1\bibrangedash 15}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1029/2011JF002327
+      \endverb
+      \verb{file}
+      \verb :Users/new/Documents/Literature/MacGregor{\_}et{\_}al-2012-Journal{\_}of{\_}Geophysical{\_}Research{\_}{\_}Earth{\_}Surface{\_}(2003-2012).pdf:pdf
+      \endverb
+      \keyw{Vostok,dielectric properties of ice,ice sheets,ice-penetrating radar}
+    \endentry
+    \entry{MacGregor2007}{article}{}
+      \name{author}{6}{uniquelist=2}{%
+        {{uniquename=0,hash=9bf140a77f1ea236e7e39553a1e15c43}{%
+           family={MacGregor},
+           familyi={M\bibinitperiod},
+           given={Joseph\bibnamedelima A.},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{uniquename=0,hash=2339b83354aababba5bbc786eb9ab531}{%
+           family={Winebrenner},
+           familyi={W\bibinitperiod},
+           given={Dale\bibnamedelima P.},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{uniquename=0,hash=c583ecbdbcacf36aa859ed56d51f4913}{%
+           family={Conway},
+           familyi={C\bibinitperiod},
+           given={Howard},
+           giveni={H\bibinitperiod}}}%
+        {{uniquename=0,hash=46f961f16ae52574cb2590442f516da6}{%
+           family={Matsuoka},
+           familyi={M\bibinitperiod},
+           given={Kenichi},
+           giveni={K\bibinitperiod}}}%
+        {{uniquename=0,hash=1e3d7cbb234ef88ac4a90d3a8b7fdba4}{%
+           family={Mayewski},
+           familyi={M\bibinitperiod},
+           given={Paul\bibnamedelima A.},
+           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{uniquename=0,hash=0aae445dfbac9cddbd62b63971c4dd8a}{%
+           family={Clow},
+           familyi={C\bibinitperiod},
+           given={Gary\bibnamedelima D.},
+           giveni={G\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{5615a4fe2102492e4b8906c18032b8e6}
+      \strng{fullhash}{cf5b4b97701e052fca4bbc97b03db3cd}
+      \strng{authornamehash}{5615a4fe2102492e4b8906c18032b8e6}
+      \strng{authorfullhash}{cf5b4b97701e052fca4bbc97b03db3cd}
+      \field{sortinit}{M}
+      \field{sortinithash}{c26a05ef03e4429073ed5c825140fac3}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The radar reflectivity of an ice-sheet bed is a primary measurement for discriminating between thawed and frozen beds. Uncertainty in englacial radar attenuation and its spatial variation introduces corresponding uncertainty in estimates of basal reflectivity. Radar attenuation is proportional to ice conductivity, which depends on the concentrations of acid and sea-salt chloride and the temperature of the ice. We synthesize published conductivity measurements to specify an ice-conductivity model and find that some of the dielectric properties of ice at radar frequencies are not yet well constrained. Using depth profiles of ice-core chemistry and borehole temperature and an average of the experimental values for the dielectric properties, we calculate an attenuation rate profile for Siple Dome, West Antarctica. The depth-averaged modeled attenuation rate at Siple Dome (20.0 ± 5.7 dB km1) is somewhat lower than the value derived from radar profiles (25.3 ± 1.1 dB km1). Pending more experimental data on the dielectric properties of ice, we can match the modeled and radar-derived attenuation rates by an adjustment to the value for the pure ice conductivity that is within the range of reported values. Alternatively, using the pure ice dielectric properties derived from the most extensive single data set, the modeled depth-averaged attenuation rate is 24.0 ± 2.2 dB km1. This work shows how to calculate englacial radar attenuation using ice chemistry and temperature data and establishes a basis for mapping spatial variations in radar attenuation across an ice sheet.}
+      \field{isbn}{0148-0227}
+      \field{issn}{21699011}
+      \field{journaltitle}{Journal of Geophysical Research: Earth Surface}
+      \field{number}{3}
+      \field{title}{{Modeling englacial radar attenuation at Siple Dome, West Antarctica, using ice chemistry and temperature data}}
+      \field{volume}{112}
+      \field{year}{2007}
+      \field{pages}{1\bibrangedash 14}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1029/2006JF000717
+      \endverb
+      \verb{file}
+      \verb :Users/new/Documents/Literature/MacGregor2007.pdf:pdf
+      \endverb
+    \endentry
+    \entry{Macgregor2015}{article}{}
+      \name{author}{12}{}{%
+        {{uniquename=0,hash=289d53bf17f5da7a39107bb4b4df0020}{%
+           family={Macgregor},
+           familyi={M\bibinitperiod},
+           given={Joseph\bibnamedelima a},
+           giveni={J\bibinitperiod\bibinitdelim a\bibinitperiod}}}%
+        {{uniquename=0,hash=645541518445bc349a63ceb34bed2027}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Jilu},
+           giveni={J\bibinitperiod}}}%
+        {{uniquename=0,hash=7b1160baf8761adf9dbb517dc3aaa66c}{%
+           family={Paden},
+           familyi={P\bibinitperiod},
+           given={John\bibnamedelima D},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{uniquename=0,hash=13356d7f820e0c86686aa1f909039ca6}{%
+           family={Catania},
+           familyi={C\bibinitperiod},
+           given={Ginny\bibnamedelima a},
+           giveni={G\bibinitperiod\bibinitdelim a\bibinitperiod}}}%
+        {{uniquename=0,hash=56420aca181aa8fd4c5691d98eac6449}{%
+           family={Clow},
+           familyi={C\bibinitperiod},
+           given={Gary\bibnamedelima D},
+           giveni={G\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{uniquename=0,hash=2a2a602c68292b6305715bb5d650c456}{%
+           family={Fahnestock},
+           familyi={F\bibinitperiod},
+           given={Mark\bibnamedelima a},
+           giveni={M\bibinitperiod\bibinitdelim a\bibinitperiod}}}%
+        {{uniquename=0,hash=bd8e4a44f12b8c9ba0b0ee86320e9d4d}{%
+           family={Gogineni},
+           familyi={G\bibinitperiod},
+           given={S\bibnamedelima Prasad},
+           giveni={S\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{uniquename=0,hash=a73e26e9ab430cba6c6f3483bda4032d}{%
+           family={Grimm},
+           familyi={G\bibinitperiod},
+           given={Robert\bibnamedelima E},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{uniquename=0,hash=4d2861f99aca676d0d0962306cb72598}{%
+           family={Morlighem},
+           familyi={M\bibinitperiod},
+           given={Mathieu},
+           giveni={M\bibinitperiod}}}%
+        {{uniquename=0,hash=2bf316c6ea0f56568629c5d71bad358f}{%
+           family={Nandi},
+           familyi={N\bibinitperiod},
+           given={Soumyaroop},
+           giveni={S\bibinitperiod}}}%
+        {{uniquename=0,hash=4fe9992424c3f5976683ed25ce18e749}{%
+           family={Seroussi},
+           familyi={S\bibinitperiod},
+           given={Hélène},
+           giveni={H\bibinitperiod}}}%
+        {{uniquename=0,hash=fb821d26ad128d1da06e18d16f19b456}{%
+           family={Stillman},
+           familyi={S\bibinitperiod},
+           given={David\bibnamedelima E},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{8f62e5f3bc6c0140ec8b83646352b07a}
+      \strng{fullhash}{dce9c6f88729ddf7f3ace7d9b1456566}
+      \strng{authornamehash}{8f62e5f3bc6c0140ec8b83646352b07a}
+      \strng{authorfullhash}{dce9c6f88729ddf7f3ace7d9b1456566}
+      \field{sortinit}{M}
+      \field{sortinithash}{c26a05ef03e4429073ed5c825140fac3}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{Radar attenuation and temperature within the Greenland Ice Sheet}}
+      \field{year}{2015}
+      \field{pages}{1\bibrangedash 26}
+      \range{pages}{26}
+      \verb{doi}
+      \verb 10.1002/2014JF003418.Received
+      \endverb
+      \verb{file}
+      \verb :Users/new/Library/Application Support/Mendeley Desktop/Downloaded/Macgregor et al. - 2015 - Journal of Geophysical Research Earth Surface.pdf:pdf
+      \endverb
+    \endentry
+    \entry{Nicholls2015}{article}{}
+      \name{author}{6}{}{%
+        {{uniquename=0,hash=1952fc685c8fdd2276952d1bf99af4d3}{%
+           family={Nicholls},
+           familyi={N\bibinitperiod},
+           given={Keith\bibnamedelima W.},
+           giveni={K\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{uniquename=0,hash=519f8eb8f6be0d0a143b4394507568ef}{%
+           family={Corr},
+           familyi={C\bibinitperiod},
+           given={Hugh\bibnamedelima F.J.},
+           giveni={H\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{uniquename=0,hash=4bc8f582e1f183cc7a0a4703e06655f8}{%
+           family={Stewart},
+           familyi={S\bibinitperiod},
+           given={Craig\bibnamedelima L.},
+           giveni={C\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{uniquename=0,hash=5ee5e80a3b7b46f08c0cb9bd47de45bf}{%
+           family={Lok},
+           familyi={L\bibinitperiod},
+           given={Lai\bibnamedelima Bun},
+           giveni={L\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{uniquename=0,hash=50eeafe3c4082d7943a1dd9e56bae2be}{%
+           family={Brennan},
+           familyi={B\bibinitperiod},
+           given={Paul\bibnamedelima V.},
+           giveni={P\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{uniquename=0,hash=b8582a7bd42c544f75397d7d0af14be1}{%
+           family={Vaughan},
+           familyi={V\bibinitperiod},
+           given={David\bibnamedelima G.},
+           giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \strng{namehash}{4cd624728448063453e80d00e48bf30e}
+      \strng{fullhash}{c7ebfe396fa8e7c9d96ac9e1dafa1eba}
+      \strng{authornamehash}{4cd624728448063453e80d00e48bf30e}
+      \strng{authorfullhash}{c7ebfe396fa8e7c9d96ac9e1dafa1eba}
+      \field{sortinit}{N}
+      \field{sortinithash}{1163c28585427c673ad5a010cbf82f52}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{environmental science}
+      \field{issn}{00221430}
+      \field{journaltitle}{Journal of Glaciology}
+      \field{number}{230}
+      \field{title}{{Instruments and methods: A ground-based radar for measuring vertical strain rates and time-varying basal melt rates in ice sheets and shelves}}
+      \field{volume}{61}
+      \field{year}{2015}
+      \field{pages}{1079\bibrangedash 1087}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.3189/2015JoG15J073
+      \endverb
+      \verb{file}
+      \verb :Users/new/Documents/Literature/Nicholls(2015).pdf:pdf
+      \endverb
+      \keyw{Antarctic glaciology,Glaciological instruments and methods,Ice shelves,Ice/ocean interactions,Radio-echo sounding}
+    \endentry
+    \entry{Robin1958}{book}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=265edf4db608bbf8bd9a24e764753aaf}{%
+           family={Robin},
+           familyi={R\bibinitperiod},
+           given={G.\bibnamedelimi de\bibnamedelima Q.},
+           giveni={G\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim Q\bibinitperiod}}}%
+      }
+      \strng{namehash}{265edf4db608bbf8bd9a24e764753aaf}
+      \strng{fullhash}{265edf4db608bbf8bd9a24e764753aaf}
+      \strng{authornamehash}{265edf4db608bbf8bd9a24e764753aaf}
+      \strng{authorfullhash}{265edf4db608bbf8bd9a24e764753aaf}
+      \field{sortinit}{R}
+      \field{sortinithash}{c15bc8eb6936bc6b3c8baa9e8575af53}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{Glaciology III: Seismic shooting and related investigations}}
+      \field{year}{1958}
+    \endentry
+    \entry{Vaughan1999}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,hash=b8582a7bd42c544f75397d7d0af14be1}{%
+           family={Vaughan},
+           familyi={V\bibinitperiod},
+           given={David\bibnamedelima G.},
+           giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{uniquename=0,hash=519f8eb8f6be0d0a143b4394507568ef}{%
+           family={Corr},
+           familyi={C\bibinitperiod},
+           given={Hugh\bibnamedelima F.J.},
+           giveni={H\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{uniquename=0,hash=3bc18e0b38d4d08a113efb3e1d040e12}{%
+           family={Doake},
+           familyi={D\bibinitperiod},
+           given={Christopher\bibnamedelima S.M.},
+           giveni={C\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{uniquename=0,hash=bbe19f77de814ed68d05c5727b680b93}{%
+           family={Waddington},
+           familyi={W\bibinitperiod},
+           given={Ed\bibnamedelima D.},
+           giveni={E\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{49c9e4d514589461ef64ad6e596b4c5c}
+      \strng{fullhash}{2ed42b3d2621650573b95624a6bf135e}
+      \strng{authornamehash}{49c9e4d514589461ef64ad6e596b4c5c}
+      \strng{authorfullhash}{2ed42b3d2621650573b95624a6bf135e}
+      \field{sortinit}{V}
+      \field{sortinithash}{555737dafdcf1396ebfeae5822e5bde2}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Presents ground-penetrating radar data from Antarctica, which show arches and troughs in isochronous ice layers to a depth of 100 meters. Demonstration that the origin of the features can be determined by their growth with depth; Features that result from local anomalies in accumulation rate, which can be correlated with the ice surface slope. (Copyright applies to all Abstracts.)}
+      \field{issn}{00280836}
+      \field{journaltitle}{Nature}
+      \field{number}{6725}
+      \field{title}{{Distortion of isochronous layers in ice revealed by ground-penetrating radar}}
+      \field{volume}{398}
+      \field{year}{1999}
+      \field{pages}{323\bibrangedash 326}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1038/18653
+      \endverb
+      \verb{file}
+      \verb :Users/new/Documents/Literature/Vaughan(1998){\_}Nature.pdf:pdf
+      \endverb
+    \endentry
+    \entry{Yee1966}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=95b3b39fce739c72a4b974dea5de8d47}{%
+           family={Yee},
+           familyi={Y\bibinitperiod},
+           given={Kane\bibnamedelima S},
+           giveni={K\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{95b3b39fce739c72a4b974dea5de8d47}
+      \strng{fullhash}{95b3b39fce739c72a4b974dea5de8d47}
+      \strng{authornamehash}{95b3b39fce739c72a4b974dea5de8d47}
+      \strng{authorfullhash}{95b3b39fce739c72a4b974dea5de8d47}
+      \field{sortinit}{Y}
+      \field{sortinithash}{f86c10978eb0c0879609ce6a4f43da7b}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Maxwell's equations are replaced by a set of finite difference equations. It is shown that if one chooses the field points appropriately, the set of finite difference equations is applicable for a boundary condition involving perfectly conducting surfaces. An example is given of the scattering of an electromagnetic pulse by a perfectly conducting cylinder.}
+      \field{isbn}{0018-926X}
+      \field{issn}{0018-926X}
+      \field{journaltitle}{IEEE Transactions on Antennas and Propagation}
+      \field{number}{3}
+      \field{title}{{Numerical solution of initial boundary value problems involving Maxwell's equations in isotropic media}}
+      \field{volume}{14}
+      \field{year}{1966}
+      \field{pages}{302\bibrangedash 307}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1109/TAP.1966.1138693
+      \endverb
+      \verb{file}
+      \verb :Users/new/Documents/Literature/Yee(1966){\_}MaxwellsEqns.pdf:pdf
+      \endverb
+      \keyw{CA,FDTD,Kane Yee,Livermore,USA,University of California,electrodynamics}
     \endentry
   \endsortlist
 \endrefsection

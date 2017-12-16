@@ -91,11 +91,11 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxbibnames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>10</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxcitenames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>1</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxitems</bcf:key>
@@ -2143,8 +2143,19 @@
     <bcf:datasource type="file" datatype="bibtex">FDTD_paper.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">Christianson2016</bcf:citekey>
+    <bcf:citekey order="1">Griffiths1981</bcf:citekey>
     <bcf:citekey order="2">Yee1966</bcf:citekey>
+    <bcf:citekey order="3">Evans1961</bcf:citekey>
+    <bcf:citekey order="4">Robin1958</bcf:citekey>
+    <bcf:citekey order="5">Vaughan1999</bcf:citekey>
+    <bcf:citekey order="6">Nicholls2015</bcf:citekey>
+    <bcf:citekey order="6">Kingslake2014</bcf:citekey>
+    <bcf:citekey order="7">Dowdeswell2004</bcf:citekey>
+    <bcf:citekey order="8">MacGregor2007</bcf:citekey>
+    <bcf:citekey order="9">MacGregor2012</bcf:citekey>
+    <bcf:citekey order="10">Macgregor2015</bcf:citekey>
+    <bcf:citekey order="11">Irving2006</bcf:citekey>
+    <bcf:citekey order="12">Christianson2016</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" name="nty/global/" type="entry" sortscheme="nty" sortnamekeyscheme="global" labelprefix="">
   <bcf:sorting>

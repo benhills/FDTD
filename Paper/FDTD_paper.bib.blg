@@ -1,5 +1,5 @@
-[1] Config.pm:354> INFO - This is Biber 2.7
-[1] Config.pm:357> INFO - Logfile is 'FDTD_paper.bib.blg'
-[81] biber-darwin:303> INFO - === Tue Dec 12, 2017, 22:53:29
-[331] Utils.pm:180> ERROR - Cannot find control file 'FDTD_paper.bib.bcf'! - did you pass the "backend=biber" option to BibLaTeX?
-[332] Biber.pm:113> INFO - ERRORS: 1
+[0] Config.pm:354> INFO - This is Biber 2.7
+[0] Config.pm:357> INFO - Logfile is 'FDTD_paper.bib.blg'
+[124] biber-darwin:303> INFO - === Thu Dec 14, 2017, 21:19:25
+[457] Utils.pm:180> ERROR - Cannot find control file 'FDTD_paper.bib.bcf'! - did you pass the "backend=biber" option to BibLaTeX?
+[457] Biber.pm:113> INFO - ERRORS: 1
